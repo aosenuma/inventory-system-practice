@@ -53,14 +53,17 @@ def products_list(
     search: str | None = None,
     category: str | None = None,
     low_stock: str | None = None,
+    sort: str | None = None,
     db: Session = Depends(get_db),
 ):
     low_stock_only = low_stock == "1"
+    selected_sort = sort if sort in crud.SORT_OPTIONS else "name_asc"
     products = crud.get_products(
         db,
         search=search,
         category=category,
         low_stock_only=low_stock_only,
+        sort=selected_sort,
     )
     categories = crud.get_categories(db)
 
@@ -73,6 +76,7 @@ def products_list(
             "search": search or "",
             "selected_category": category or "",
             "low_stock_only": low_stock_only,
+            "selected_sort": selected_sort,
         },
     )
 
