@@ -35,6 +35,19 @@
                     {% endfor %}
                 </select>
             </div>
+            <div class="form-group">
+                <label for="sort">Sort by</label>
+                <select id="sort" name="sort">
+                    <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Nombre A-Z</option>
+                    <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Nombre Z-A</option>
+                    <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Precio: menor a mayor</option>
+                    <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Precio: mayor a menor</option>
+                    <option value="stock_asc" {% if selected_sort == 'stock_asc' %}selected{% endif %}>Stock: menor a mayor</option>
+                    <option value="stock_desc" {% if selected_sort == 'stock_desc' %}selected{% endif %}>Stock: mayor a menor</option>
+                    <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Más recientes primero</option>
+                    <option value="oldest" {% if selected_sort == 'oldest' %}selected{% endif %}>Más antiguos primero</option>
+                </select>
+            </div>
             <div class="form-group form-group-checkbox">
                 <label class="checkbox-label">
                     <input type="checkbox" name="low_stock" value="1" {% if low_stock_only %}checked{% endif %}>

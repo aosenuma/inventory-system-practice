@@ -7,11 +7,24 @@ from app.models import Product
 from app.schemas import ProductCreate, ProductUpdate
 
 
+SORT_OPTIONS = {
+    "name_asc": Product.name.asc(),
+    "name_desc": Product.name.desc(),
+    "price_asc": Product.price.asc(),
+    "price_desc": Product.price.desc(),
+    "stock_asc": Product.current_stock.asc(),
+    "stock_desc": Product.current_stock.desc(),
+    "newest": Product.created_at.desc(),
+    "oldest": Product.created_at.asc(),
+}
+
+
 def get_products(
     db: Session,
     search: Optional[str] = None,
     category: Optional[str] = None,
     low_stock_only: bool = False,
+    sort: Optional[str] = None,
 ) -> list[Product]:
     query = db.query(Product)
 
@@ -24,7 +37,8 @@ def get_products(
     if low_stock_only:
         query = query.filter(Product.current_stock <= Product.minimum_stock)
 
-    return query.order_by(Product.name.asc()).all()
+    order_by = SORT_OPTIONS.get(sort or "name_asc", Product.name.asc())
+    return query.order_by(order_by).all()
 
 
 def get_product(db: Session, product_id: int) -> Optional[Product]:

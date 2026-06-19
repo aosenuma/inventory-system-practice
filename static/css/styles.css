@@ -360,7 +360,7 @@ a:hover {
 
 .filters-row {
     display: grid;
-    grid-template-columns: 1fr 1fr auto auto;
+    grid-template-columns: 1fr 1fr 1fr auto auto;
     gap: 1rem;
     align-items: end;
 }
@@ -533,6 +533,16 @@ a:hover {
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+    .filters-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-group-actions {
+        grid-column: 1 / -1;
+    }
+}
+
 @media (max-width: 768px) {
     .header-content {
         flex-direction: column;
@@ -541,6 +551,15 @@ a:hover {
 
     .filters-row {
         grid-template-columns: 1fr;
+    }
+
+    .form-group-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-group-actions .btn {
+        width: 100%;
     }
 
     .form-row {
