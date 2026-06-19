@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Create Product | Inventory System{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Create Product</h1>
+    <p class="subtitle">Add a new item to the inventory</p>
+</section>
+
+{% if errors %}
+<div class="alert alert-error">
+    <ul>
+        {% for error in errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<section class="card card-form">
+    <form method="post" action="/products/create" class="product-form" novalidate>
+        <div class="form-group">
+            <label for="name">Name <span class="required">*</span></label>
+            <input type="text" id="name" name="name" value="{{ form_data.get('name', '') }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3">{{ form_data.get('description', '') }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category <span class="required">*</span></label>
+            <input type="text" id="category" name="category" value="{{ form_data.get('category', '') }}" required placeholder="e.g. Electronics">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="price">Price <span class="required">*</span></label>
+                <input type="number" id="price" name="price" step="0.01" min="0" value="{{ form_data.get('price', '0') }}" required>
+            </div>
+            <div class="form-group">
+                <label for="current_stock">Current Stock <span class="required">*</span></label>
+                <input type="number" id="current_stock" name="current_stock" min="0" value="{{ form_data.get('current_stock', '0') }}" required>
+            </div>
+            <div class="form-group">
+                <label for="minimum_stock">Minimum Stock <span class="required">*</span></label>
+                <input type="number" id="minimum_stock" name="minimum_stock" min="0" value="{{ form_data.get('minimum_stock', '0') }}" required>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Product</button>
+            <a href="/products" class="btn btn-outline">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

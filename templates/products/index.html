@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Products | Inventory System{% endblock %}
+
+{% block content %}
+<section class="page-header page-header-actions">
+    <div>
+        <h1>Products</h1>
+        <p class="subtitle">Manage your inventory items</p>
+    </div>
+    <a href="/products/create" class="btn btn-primary">+ New Product</a>
+</section>
+
+{% if request.query_params.get('success') == 'created' %}
+<div class="alert alert-success">Product created successfully.</div>
+{% elif request.query_params.get('success') == 'updated' %}
+<div class="alert alert-success">Product updated successfully.</div>
+{% elif request.query_params.get('success') == 'deleted' %}
+<div class="alert alert-success">Product deleted successfully.</div>
+{% endif %}
+
+<section class="card">
+    <form class="filters" method="get" action="/products">
+        <div class="filters-row">
+            <div class="form-group">
+                <label for="search">Search by name</label>
+                <input type="text" id="search" name="search" value="{{ search }}" placeholder="e.g. Mouse">
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                    <option value="">All categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group form-group-checkbox">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="low_stock" value="1" {% if low_stock_only %}checked{% endif %}>
+                    Low stock only
+                </label>
+            </div>
+            <div class="form-group form-group-actions">
+                <button type="submit" class="btn btn-secondary">Filter</button>
+                <a href="/products" class="btn btn-outline">Clear</a>
+            </div>
+        </div>
+    </form>
+
+    {% if products %}
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr class="{% if product.is_low_stock %}row-low-stock{% endif %}">
+                    <td>
+                        <a href="/products/{{ product.id }}" class="link">{{ product.name }}</a>
+                    </td>
+                    <td>{{ product.category }}</td>
+                    <td>${{ "%.2f"|format(product.price) }}</td>
+                    <td>{{ product.current_stock }} / {{ product.minimum_stock }}</td>
+                    <td>
+                        {% if product.is_low_stock %}
+                        <span class="badge badge-warning">Low stock</span>
+                        {% else %}
+                        <span class="badge badge-success">OK</span>
+                        {% endif %}
+                    </td>
+                    <td class="actions-cell">
+                        <a href="/products/{{ product.id }}" class="btn btn-outline btn-sm">View</a>
+                        <a href="/products/{{ product.id }}/edit" class="btn btn-secondary btn-sm">Edit</a>
+                        <form method="post" action="/products/{{ product.id }}/delete" class="inline-form delete-form">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="empty-state">No products found. <a href="/products/create">Create a product</a>.</p>
+    {% endif %}
+</section>
+{% endblock %}

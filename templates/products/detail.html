@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} | Inventory System{% endblock %}
+
+{% block content %}
+<section class="page-header page-header-actions">
+    <div>
+        <h1>{{ product.name }}</h1>
+        <p class="subtitle">Product details</p>
+    </div>
+    <div class="header-buttons">
+        <a href="/products/{{ product.id }}/edit" class="btn btn-secondary">Edit</a>
+        <form method="post" action="/products/{{ product.id }}/delete" class="inline-form delete-form">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+</section>
+
+{% if request.query_params.get('success') == 'updated' %}
+<div class="alert alert-success">Product updated successfully.</div>
+{% endif %}
+
+<section class="card">
+    <div class="detail-grid">
+        <div class="detail-item">
+            <span class="detail-label">ID</span>
+            <span class="detail-value">{{ product.id }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Category</span>
+            <span class="detail-value">{{ product.category }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Price</span>
+            <span class="detail-value">${{ "%.2f"|format(product.price) }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Current Stock</span>
+            <span class="detail-value">{{ product.current_stock }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Minimum Stock</span>
+            <span class="detail-value">{{ product.minimum_stock }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Status</span>
+            <span class="detail-value">
+                {% if product.is_low_stock %}
+                <span class="badge badge-warning">Low stock</span>
+                {% else %}
+                <span class="badge badge-success">OK</span>
+                {% endif %}
+            </span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Created At</span>
+            <span class="detail-value">{{ product.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Updated At</span>
+            <span class="detail-value">{{ product.updated_at.strftime('%Y-%m-%d %H:%M') }}</span>
+        </div>
+    </div>
+
+    {% if product.description %}
+    <div class="detail-description">
+        <h3>Description</h3>
+        <p>{{ product.description }}</p>
+    </div>
+    {% endif %}
+</section>
+
+<div class="back-link">
+    <a href="/products" class="btn btn-outline">&larr; Back to products</a>
+</div>
+{% endblock %}
