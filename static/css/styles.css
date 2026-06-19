@@ -279,6 +279,11 @@ a:hover {
     color: var(--color-warning);
 }
 
+.badge-danger {
+    background: #fee2e2;
+    color: var(--color-danger);
+}
+
 /* Buttons */
 .btn {
     display: inline-flex;
