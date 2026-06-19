@@ -71,10 +71,12 @@
                     <td>${{ "%.2f"|format(product.price) }}</td>
                     <td>{{ product.current_stock }} / {{ product.minimum_stock }}</td>
                     <td>
-                        {% if product.is_low_stock %}
-                        <span class="badge badge-warning">Low stock</span>
+                        {% if product.current_stock == 0 %}
+                           <span class="badge badge-danger">Agotado</span>          
+                        {% elif product.current_stock <= product.minimum_stock %}
+                            <span class="badge badge-warning">Stock bajo</span>
                         {% else %}
-                        <span class="badge badge-success">OK</span>
+                            <span class="badge badge-success">Disponible</span>
                         {% endif %}
                     </td>
                     <td class="actions-cell">
